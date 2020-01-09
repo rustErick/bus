@@ -299,7 +299,7 @@ public class GestionarCliente extends javax.swing.JFrame {
                     try {
                         Connection cn2 = Conexion.conectar();
                         PreparedStatement pst2 = cn2.prepareStatement("INSERT INTO Clientes VALUES "
-                                + "(null, ?, ?, ?, ?, ?, ?, default)");
+                                + "(null, ?, ?, ?, ?, ?, ?, default, default)");
                         pst2.setString(1, txtNombres.getText().toUpperCase().trim());
                         pst2.setString(2, txtApellidos.getText().toUpperCase().trim());
                         pst2.setString(3, txtDni.getText().trim());

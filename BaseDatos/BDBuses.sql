@@ -25,6 +25,7 @@ CREATE TABLE Clientes (
     TipoCliente VARCHAR(20),
     Picture VARCHAR(255),
     Estado VARCHAR(10) DEFAULT 'Activo',
+    FechaRegistrado DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(idClientes)
 );
 

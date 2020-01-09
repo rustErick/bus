@@ -37,6 +37,11 @@ public class Administrador extends javax.swing.JFrame {
         jLabel2.setBackground(new java.awt.Color(35, 123, 37));
         jLabel2.setText("Cuadro de estado");
         jLabel2.setOpaque(true);
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
 
         lblRecargas.setBackground(new java.awt.Color(50, 192, 163));
         lblRecargas.setText("Recargas");
@@ -101,6 +106,10 @@ public class Administrador extends javax.swing.JFrame {
         this.dispose();
         new Login().setVisible(true);
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        new ReporteGrafico().setVisible(true);
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     public static void main(String args[]) {
         
