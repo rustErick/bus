@@ -1,8 +1,8 @@
 
 package clases;
 
+import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -16,6 +16,8 @@ public class Reporte {
     DefaultCategoryDataset data = new DefaultCategoryDataset();
     
     public void Report(){
+        
+        ConvertirFecha cf = new ConvertirFecha();
         
         String universitario = "UNIVERSITARIO";
         String escolar = "ESCOLAR";
@@ -43,7 +45,7 @@ public class Reporte {
                 PlotOrientation.VERTICAL,
                 true, true, false);
         
-        
+        JOptionPane.showMessageDialog(null, cf.Fecha("2020-01-02 16:56:55", "dd"));
     }
     
     public JFreeChart getGraf(){

@@ -1,10 +1,6 @@
 package ventanas;
 
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-
-import org.jfree.data.category.DefaultCategoryDataset;
-import clases.ConvertirFecha;
 import clases.Reporte;
 /**
  *
@@ -15,12 +11,10 @@ public class ReporteGrafico extends javax.swing.JFrame {
     
     public ReporteGrafico() {
         initComponents();
-        this.setLocationRelativeTo(null);
-        ConvertirFecha cf = new ConvertirFecha();
+        this.setLocationRelativeTo(null);    
         
         Reporte rp = new Reporte();
         rp.Report();
-        
         ChartPanel chartPanel = new ChartPanel(rp.getGraf());
         setContentPane(chartPanel);
     }
