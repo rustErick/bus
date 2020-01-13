@@ -20,7 +20,7 @@ CREATE TABLE Clientes (
     idClientes INT AUTO_INCREMENT,
     Nombres VARCHAR(100),
     Apellidos VARCHAR(150),
-    DNI int(8),
+    DNI INT(8),
     Sexo VARCHAR(10),
     TipoCliente VARCHAR(20),
     Picture VARCHAR(255),
@@ -32,14 +32,19 @@ CREATE TABLE Clientes (
 CREATE TABLE Recargas(
     idRecargas INT AUTO_INCREMENT,
     idClientes INT,
-    Nombres VARCHAR(100),
-    Apellidos VARCHAR(150),
-    Monto DECIMAL(10, 2),
+    MontoActual DECIMAL(10, 2) DEFAULT 0.0,
     FechaRecarga DATETIME DEFAULT CURRENT_TIMESTAMP,
     TipoPago VARCHAR(20),
-    TipoCliente VARCHAR(20),
     PRIMARY KEY(idRecargas),
     FOREIGN KEY(idClientes) REFERENCES Clientes(idClientes)
+);
+
+CREATE TABLE agregarRecarga(
+    idAgregarRecarga INT AUTO_INCREMENT,
+    montoRecargar DECIMAL(10, 2) DEFAULT 0.0,
+    idRecargas INT,
+    PRIMARY KEY(idAgregarRecarga),
+    FOREIGN KEY(idRecargas) REFERENCES Recargas(idRecargas)
 );
 
 CREATE TABLE EstadoCliente (

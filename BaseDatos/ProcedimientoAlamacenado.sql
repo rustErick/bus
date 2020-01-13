@@ -7,4 +7,14 @@ BEGIN
   GROUP BY month(FechaRegistrado), TipoCliente;
 END;
 //
-DELIMITER;
+
+
+DELIMITER //
+CREATE PROCEDURE spClienteDetalle(IN NumeroDni INT(8))
+BEGIN
+  SELECT R.idRecargas, R.MontoActual, C.Nombres, C.Apellidos, C.Picture
+  FROM Clientes AS C
+  INNER JOIN Recargas AS R ON R.idClientes=C.idClientes
+  WHERE C.DNI = 45345345;
+END;
+//
