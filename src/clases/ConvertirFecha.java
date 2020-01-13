@@ -10,7 +10,8 @@ import java.time.format.DateTimeFormatter;
 public class ConvertirFecha {
     
     public String Fecha(String data, String salidaFormato)  {
-        LocalDate fecha = LocalDate.parse(data, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); 
+        
+        LocalDate fecha = LocalDate.parse(data.substring(0, 19), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); 
         DateTimeFormatter mes = DateTimeFormatter.ofPattern(salidaFormato);
         return fecha.format(mes);
     }
