@@ -15,7 +15,7 @@ import javax.swing.WindowConstants;
 public class GestionarRecarga extends javax.swing.JFrame {
 
     String imgP;
-    int idRecargas;
+    String _idClientes="";
     public GestionarRecarga() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -137,7 +137,7 @@ public class GestionarRecarga extends javax.swing.JFrame {
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtMontoActual))
                         .addGap(35, 35, 35)
-                        .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -208,9 +208,9 @@ public class GestionarRecarga extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(347, Short.MAX_VALUE)
+                .addGap(261, 261, 261)
                 .addComponent(jLabel3)
-                .addGap(183, 183, 183)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblClose)
@@ -224,10 +224,8 @@ public class GestionarRecarga extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
                         .addComponent(lblClose))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -263,6 +261,7 @@ public class GestionarRecarga extends javax.swing.JFrame {
         String tipoPago = "";
         int validacion = 0;
         int cbxtipo = cbxTipoPago.getSelectedIndex() + 1;
+        
         if(cbxtipo == 1){
             tipoPago = "Efectivo";
         }else if(cbxtipo == 2){
@@ -275,10 +274,12 @@ public class GestionarRecarga extends javax.swing.JFrame {
         if(validacion == 0){
         try {
             Connection cn = Conexion.conectar();
-            PreparedStatement pst = cn.prepareStatement("UPDATE agregarRecarga " +
-                    "SET montoRecargar = ? WHERE idRecargas = ?;");
-            pst.setString(1, txtMonto.getText().trim());
-            pst.setInt(2, idRecargas);
+            PreparedStatement pst = cn.prepareStatement("insert into Recargas "
+                    + "values(null, ?, default, ?, ?)");
+            pst.setString(3, txtMonto.getText().trim());
+            pst.setString(2, tipoPago);
+            pst.setString(1, _idClientes);
+            
             
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null, "La recarga se realizo correctamente");
@@ -288,7 +289,7 @@ public class GestionarRecarga extends javax.swing.JFrame {
             
             
         }catch(SQLException e){
-            System.out.println("Error al recargar");
+            System.out.println("Error al recargar "+e);
             JOptionPane.showMessageDialog(null, "Contacte con el administrador");
             JOptionPane.showMessageDialog(null, "Ingrese el monto de la recarga valido");
         }
@@ -297,20 +298,20 @@ public class GestionarRecarga extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         
+        int dni=Integer.parseInt(txtDni.getText());
         try {
             
             Connection cn = Conexion.conectar();
-            CallableStatement cst = cn.prepareCall("{call spClienteDetalle(?)}");
-            cst.setString(1, txtDni.getText().trim());
+            PreparedStatement cst = cn.prepareStatement("SELECT * FROM Clientes "
+                    + "WHERE DNI="+dni);
             ResultSet rs = cst.executeQuery();
-       
             if(rs.next()){
-                idRecargas = rs.getInt(1);
-                txtMontoActual.setText(rs.getString(2));
-                txtNombres.setText(rs.getString(3));
-                txtApellidos.setText(rs.getString(4));
+                _idClientes = rs.getString("idClientes");
+                txtMontoActual.setText(rs.getString("MontoActual"));
+                txtNombres.setText(rs.getString("Nombres"));
+                txtApellidos.setText(rs.getString("Apellidos"));
                 Photo img = new Photo();
-                img.setImage(lblPerfil, rs.getString(5));
+                img.setImage(lblPerfil, rs.getString("Picture"));
                 
             }else {
                 JOptionPane.showMessageDialog(null,"Cliente no encontrado, Agregue un nuevo cliente");

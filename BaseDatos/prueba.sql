@@ -41,39 +41,21 @@ DELETE FROM stocks WHERE product_id = old.id;
 END;
 //
 
+delete from products where id = 101;
+select * from products;
+select * from stocks;
+
 DELIMITER //
 CREATE TRIGGER stocks_before_update
 BEFORE UPDATE
 ON stocks_add FOR EACH ROW
-
 BEGIN
-
-UPDATE stocks 
-SET current_stock=current_stock+(new.quantity-old.quantity)
+UPDATE stocks SET current_stock=current_stock+(new.quantity-old.quantity)
 WHERE product_id = old.product_id;
-
 END;
 //
 
-update stocks_add set 
-quantity=75 where product_id=103 and entry_date='2018-01-01';
-CREATE TABLE products(
-    id INT(11),
-    name VARCHAR(30) NOT NULL,
-    price INT(11),
-    PRIMARY KEY (id)
-);
 
-CREATE TABLE stocks( 
-    product_id INT(11),
-    opening_stock INT(11),
-    current_stock INT(11),
-    PRIMARY KEY (product_id)
-);
-
-CREATE TABLE stocks_add( 
-    product_id INT(11),
-    entry_date DATE,
-    quantity INT(11),
-    PRIMARY KEY (product_id,entry_date)
-);
+update stocks_add set quantity=20 where product_id=103 and entry_date='2018-01-01';
+select * from stocks;
+select * from stocks_add;

@@ -26,25 +26,18 @@ CREATE TABLE Clientes (
     Picture VARCHAR(255),
     Estado VARCHAR(10) DEFAULT 'Activo',
     FechaRegistrado DATETIME DEFAULT CURRENT_TIMESTAMP,
+    MontoActual DECIMAL(10, 2) DEFAULT 0.0,
     PRIMARY KEY(idClientes)
 );
 
 CREATE TABLE Recargas(
     idRecargas INT AUTO_INCREMENT,
     idClientes INT,
-    MontoActual DECIMAL(10, 2) DEFAULT 0.0,
     FechaRecarga DATETIME DEFAULT CURRENT_TIMESTAMP,
     TipoPago VARCHAR(20),
+    montoRecargar DECIMAL(10, 2) DEFAULT 0.0,
     PRIMARY KEY(idRecargas),
     FOREIGN KEY(idClientes) REFERENCES Clientes(idClientes)
-);
-
-CREATE TABLE agregarRecarga(
-    idAgregarRecarga INT AUTO_INCREMENT,
-    montoRecargar DECIMAL(10, 2) DEFAULT 0.0,
-    idRecargas INT,
-    PRIMARY KEY(idAgregarRecarga),
-    FOREIGN KEY(idRecargas) REFERENCES Recargas(idRecargas)
 );
 
 CREATE TABLE EstadoCliente (

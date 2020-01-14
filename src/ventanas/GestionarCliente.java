@@ -18,7 +18,7 @@ public class GestionarCliente extends javax.swing.JFrame {
 
     ImageIcon myPicture = null;
     String imgP;
-
+    
     public GestionarCliente() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -247,7 +247,7 @@ public class GestionarCliente extends javax.swing.JFrame {
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         Photo img = new Photo();
         String imageName = img.saveImage(myPicture, "images");
-
+        int dni = Integer.parseInt(txtDni.getText().trim());
         int validacion = 0;
         String sexo = "", tipoCliente = "";
 
@@ -286,7 +286,7 @@ public class GestionarCliente extends javax.swing.JFrame {
         try {
             Connection cn = Conexion.conectar();
             PreparedStatement pst = cn.prepareStatement("SELECT DNI FROM Clientes "
-                    + "WHERE DNI = '" + txtDni.getText() + "'");
+                    + "WHERE DNI = '" + dni + "'");
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 txtDni.setBackground(Color.red);
@@ -299,10 +299,10 @@ public class GestionarCliente extends javax.swing.JFrame {
                     try {
                         Connection cn2 = Conexion.conectar();
                         PreparedStatement pst2 = cn2.prepareStatement("INSERT INTO Clientes VALUES "
-                                + "(null, ?, ?, ?, ?, ?, ?, default, default)");
+                                + "(null, ?, ?, ?, ?, ?, ?, default, default, default)");
                         pst2.setString(1, txtNombres.getText().toUpperCase().trim());
                         pst2.setString(2, txtApellidos.getText().toUpperCase().trim());
-                        pst2.setString(3, txtDni.getText().trim());
+                        pst2.setInt(3, dni);
                         pst2.setString(4, sexo);
                         pst2.setString(5, tipoCliente);
                         pst2.setString(6, imageName);
@@ -319,7 +319,7 @@ public class GestionarCliente extends javax.swing.JFrame {
                 }
             }
         } catch (HeadlessException | SQLException e) {
-            System.out.println("Error al registrar "+e);
+            System.out.println("Error al registrar " + e);
             JOptionPane.showMessageDialog(null, "Contacte con el administrador");
         }
     }//GEN-LAST:event_btnCrearActionPerformed
