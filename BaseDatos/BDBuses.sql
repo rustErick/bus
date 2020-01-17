@@ -40,11 +40,12 @@ CREATE TABLE Recargas(
     FOREIGN KEY(idClientes) REFERENCES Clientes(idClientes)
 );
 
-CREATE TABLE EstadoCliente (
-    id INT AUTO_INCREMENT,
-    Saldo DECIMAL(10, 8),
+CREATE TABLE pagoClientes (
+    idPago INT AUTO_INCREMENT,
+    idClientes INT,
     FechaViaje DATETIME DEFAULT CURRENT_TIMESTAMP,
     FechaPago DATETIME DEFAULT CURRENT_TIMESTAMP,
     MontoPago DECIMAL(5, 3),
-    PRIMARY KEY(id)
+    PRIMARY KEY(idPago),
+    FOREIGN KEY(idClientes) REFERENCES Clientes(idClientes)
 );

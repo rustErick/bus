@@ -12,15 +12,63 @@ import javax.swing.WindowConstants;
  *
  * @author erick
  */
-public class GestionarRecarga extends javax.swing.JFrame {
+public class ModificarRecarga extends javax.swing.JFrame {
 
     String imgP;
-    public String _idClientes="";
-    public GestionarRecarga() {
+    int dniUpdate;
+    public ModificarRecarga() {
         initComponents();
+        dniUpdate=ListaRecargas.dniUp;
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        
+        String tipoPago = "";
+        int validacion = 0;
+        int cbxtipo = cbxTipoPago.getSelectedIndex() + 1;
+        
+        if(cbxtipo == 1){
+            tipoPago = "Efectivo";
+        }else if(cbxtipo == 2){
+            tipoPago = "Tarjeta";
+        }
+        if(txtMonto.equals("") && txtMonto.getText().length() == 0){
+            validacion++;
+            
+        }
+        if(validacion == 0){
+        try {
+            Connection cn = Conexion.conectar();
+            CallableStatement cst = cn.prepareCall("{call spDetalleRecarga(?)}");
+            cst.setInt(1, dniUpdate);
+            ResultSet rs = cst.executeQuery();
+            
+            if(rs.next()){
+                
+                txtDni.setText(rs.getString(1));
+                txtNombres.setText(rs.getString(2));
+                txtApellidos.setText(rs.getString(3));
+                txtMontoActual.setText(rs.getString(4));
+                txtMonto.setText(rs.getString(5));
+                tipoPago = rs.getString(6);
+                if(tipoPago.equals("Efectivo")){
+                    cbxTipoPago.setSelectedIndex(1);
+                }else if(tipoPago.equals("Tarjeta")){
+                    cbxTipoPago.setSelectedIndex(2);
+                }
+            }
+            
+            this.dispose();
+            cn.close();
+            
+            
+        }catch(SQLException e){
+            System.out.println("Error al recargar "+e);
+            JOptionPane.showMessageDialog(null, "Contacte con el administrador");
+            JOptionPane.showMessageDialog(null, "Ingrese el monto de la recarga valido");
+        }
+        }
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -33,7 +81,7 @@ public class GestionarRecarga extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        btnRecargar = new javax.swing.JButton();
+        btnAcutualizar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         txtDni = new javax.swing.JTextField();
         txtNombres = new javax.swing.JTextField();
@@ -41,7 +89,6 @@ public class GestionarRecarga extends javax.swing.JFrame {
         txtMonto = new javax.swing.JTextField();
         lblPerfil = new javax.swing.JLabel();
         cbxTipoPago = new javax.swing.JComboBox<>();
-        btnBuscar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtMontoActual = new javax.swing.JTextField();
         lblClose = new javax.swing.JLabel();
@@ -65,10 +112,10 @@ public class GestionarRecarga extends javax.swing.JFrame {
 
         jLabel8.setText("Monto recarga");
 
-        btnRecargar.setText("Recargar");
-        btnRecargar.addActionListener(new java.awt.event.ActionListener() {
+        btnAcutualizar.setText("Actualizar");
+        btnAcutualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRecargarActionPerformed(evt);
+                btnAcutualizarActionPerformed(evt);
             }
         });
 
@@ -89,13 +136,6 @@ public class GestionarRecarga extends javax.swing.JFrame {
 
         cbxTipoPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Tarjeta" }));
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bsc.png"))); // NOI18N
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Monto actual");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -105,10 +145,11 @@ public class GestionarRecarga extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(btnRecargar)
-                        .addGap(70, 70, 70)
-                        .addComponent(btnCancelar))
+                        .addGap(192, 192, 192)
+                        .addComponent(btnAcutualizar)
+                        .addGap(59, 59, 59)
+                        .addComponent(btnCancelar)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,11 +172,8 @@ public class GestionarRecarga extends javax.swing.JFrame {
                             .addComponent(txtApellidos)
                             .addComponent(txtMonto)
                             .addComponent(cbxTipoPago, 0, 277, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtMontoActual))
+                            .addComponent(txtMontoActual)
+                            .addComponent(txtDni))
                         .addGap(35, 35, 35)
                         .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -143,15 +181,10 @@ public class GestionarRecarga extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(btnBuscar))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))))
+                .addGap(44, 44, 44)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -181,7 +214,7 @@ public class GestionarRecarga extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnRecargar))
+                    .addComponent(btnAcutualizar))
                 .addContainerGap())
         );
 
@@ -257,74 +290,19 @@ public class GestionarRecarga extends javax.swing.JFrame {
         this.setState(JFrame.ICONIFIED);
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void btnRecargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecargarActionPerformed
-        String tipoPago = "";
-        int validacion = 0;
-        int cbxtipo = cbxTipoPago.getSelectedIndex() + 1;
+  
+    private void btnAcutualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcutualizarActionPerformed
         
-        if(cbxtipo == 1){
-            tipoPago = "Efectivo";
-        }else if(cbxtipo == 2){
-            tipoPago = "Tarjeta";
-        }
-        if(txtMonto.equals("") && txtMonto.getText().length() == 0){
-            validacion++;
-            
-        }
-        if(validacion == 0){
         try {
-            Connection cn = Conexion.conectar();
-            PreparedStatement pst = cn.prepareStatement("insert into Recargas "
-                    + "values(null, ?, default, ?, ?)");
-            pst.setString(3, txtMonto.getText().trim());
-            pst.setString(2, tipoPago);
-            pst.setString(1, _idClientes);
+            Connection cn2 = Conexion.conectar();
             
-            
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(null, "La recarga se realizo correctamente");
-            this.dispose();
-            new FuncionEmpleado().setVisible(true);
-            cn.close();
-            
-            
-        }catch(SQLException e){
-            System.out.println("Error al recargar "+e);
-            JOptionPane.showMessageDialog(null, "Contacte con el administrador");
-            JOptionPane.showMessageDialog(null, "Ingrese el monto de la recarga valido");
+        } catch (Exception e) {
         }
-        }
-    }//GEN-LAST:event_btnRecargarActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        
-        int dni=Integer.parseInt(txtDni.getText());
-        try {
-            
-            Connection cn = Conexion.conectar();
-            PreparedStatement cst = cn.prepareStatement("SELECT * FROM Clientes "
-                    + "WHERE DNI="+dni);
-            ResultSet rs = cst.executeQuery();
-            if(rs.next()){
-                _idClientes = rs.getString("idClientes");
-                txtMontoActual.setText(rs.getString("MontoActual"));
-                txtNombres.setText(rs.getString("Nombres"));
-                txtApellidos.setText(rs.getString("Apellidos"));
-                Photo img = new Photo();
-                img.setImage(lblPerfil, rs.getString("Picture"));
-                
-            }else {
-                JOptionPane.showMessageDialog(null,"Cliente no encontrado, Agregue un nuevo cliente");
-            }
-                
-        } catch (HeadlessException | SQLException e) {
-            System.out.println("Error al cargar cliente "+e);
-        }
-    }//GEN-LAST:event_btnBuscarActionPerformed
+    }//GEN-LAST:event_btnAcutualizarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
-        new FuncionEmpleado().setVisible(true);
+        new ListaRecargas().setVisible(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
@@ -334,15 +312,14 @@ public class GestionarRecarga extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GestionarRecarga().setVisible(true);
+                new ModificarRecarga().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnAcutualizar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnRecargar;
     private javax.swing.JComboBox<String> cbxTipoPago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

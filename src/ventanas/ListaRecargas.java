@@ -1,8 +1,10 @@
 package ventanas;
 
 import clases.Conexion;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -14,45 +16,62 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author erick
  */
-public class InformacionRecarga extends javax.swing.JFrame {
-    
+public class ListaRecargas extends javax.swing.JFrame {
+
+    public static int dniUp;
     DefaultTableModel model = new DefaultTableModel();
-    public InformacionRecarga() {
+
+    public ListaRecargas() {
         initComponents();
+        dniUp = GestionarCliente.dni;
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         try {
             Connection cn = Conexion.conectar();
-            PreparedStatement pst = cn.prepareStatement("SELECT * FROM Recargas");
-            
-            ResultSet rs = pst.executeQuery();
+            CallableStatement cst = cn.prepareCall("{call spClienteDetalle()}");
+            ResultSet rs = cst.executeQuery();
+
             tblRecargas = new JTable(model);
             jScrollPane1.setViewportView(tblRecargas);
-            
-            model.addColumn("Nro recarga");
-            model.addColumn("Codigo cliente");
+
             model.addColumn("Nombres");
             model.addColumn("Apellidos");
-            model.addColumn("Monto");
+            model.addColumn("DNI");
+            model.addColumn("Tipo de Cliente");
             model.addColumn("Fecha de recarga");
-            model.addColumn("Tipo de pago");
-            model.addColumn("Tipo de cliente");
-            
-            while(rs.next()){
-                Object[] dato = new Object[8];
-                for(int i=0; i<8; i++){
+            model.addColumn("Monto de recarga");
+            model.addColumn("tipo de pago");
+
+            while (rs.next()) {
+                Object[] dato = new Object[7];
+                for (int i = 0; i < 7; i++) {
                     dato[i] = rs.getObject(i + 1);
                 }
                 model.addRow(dato);
-                
+
             }
             cn.close();
-            
+
         } catch (SQLException e) {
-            System.out.println("Error al llenar la tabla "+ e);
-            JOptionPane.showMessageDialog(null, "Contacte con el administrador");   
+            System.out.println("Error al llenar la tabla " + e);
+            JOptionPane.showMessageDialog(null, "Contacte con el administrador");
         }
+
+        tblRecargas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tblRecargas.rowAtPoint(e.getPoint());
+                int columna = 2;
+                if (fila > -1) {
+                    dniUp = (int) model.getValueAt(fila, columna);
+                    dispose();
+                    new ModificarRecarga().setVisible(true);
+
+                }
+            }
+        });
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -111,7 +130,7 @@ public class InformacionRecarga extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InformacionRecarga().setVisible(true);
+                new ListaRecargas().setVisible(true);
             }
         });
     }

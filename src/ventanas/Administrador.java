@@ -100,7 +100,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private void lblRecargasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRecargasMouseClicked
     
-        new InformacionRecarga().setVisible(true);
+        new ListaRecargas().setVisible(true);
     }//GEN-LAST:event_lblRecargasMouseClicked
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed

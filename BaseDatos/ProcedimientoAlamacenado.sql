@@ -8,14 +8,34 @@ BEGIN
 END;
 //
 
+DELIMITER //
+CREATE PROCEDURE spRecargasMes(IN actualYear VARCHAR(4))
+BEGIN
+  SELECT month(FechaRecarga), TipoPago, count(*), FechaRecarga
+  FROM Recargas
+  WHERE YEAR(FechaRecarga) = actualYear
+  GROUP BY month(FechaRecarga), TipoPago;
+END;
+//
 
 DELIMITER //
-ALTER PROCEDURE spClienteDetalle(IN NumeroDni VARCHAR(8))
+CREATE PROCEDURE spClienteDetalle()
 BEGIN
-  SELECT Recargas.FechaRecarga, Recargas.montoRecargar, Clientes.Nombres, Clientes.Apellidos
-  FROM Recargas
-  INNER JOIN Clientes
-  ON Clientes.idClientes=Recargas.idClientes
-  WHERE Clientes.DNI = NumeroDni;
+  SELECT C.Nombres, C.Apellidos, C.DNI, C.TipoCliente, R.FechaRecarga, R.montoRecargar, R.TipoPago
+  FROM Recargas AS R
+  INNER JOIN Clientes AS C
+  ON C.idClientes=R.idClientes;
+END;
+//
+
+
+DELIMITER //
+CREATE PROCEDURE spDetalleRecarga(IN dni INT(8))
+BEGIN
+  SELECT C.DNI, C.Nombres, C.Apellidos, C.MontoActual, R.montoRecargar, R.TipoPago
+  FROM Recargas AS R
+  INNER JOIN Clientes AS C
+  ON C.idClientes=R.idClientes
+  WHERE C.DNI=dni;
 END;
 //

@@ -9,9 +9,15 @@ WHERE idClientes = NEW.idClientes;
 END;
 //
 
+
 insert into Recargas values(null, 7, default, 'tarjeta', 100);
-UPDATE Recargas 
-SET montoRecargar = 30 WHERE idClientes = 1;
+
+DELIMITER //
+CREATE TRIGGER ActualizarRecarga
+BEFORE DELETE
+ON Recargas FOR EACH ROW
+BEGIN
+UPDATE 
 
 select * from Recargas;
 select * from Clientes;

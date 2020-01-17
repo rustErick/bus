@@ -17,6 +17,9 @@ public class Reporte {
     DefaultCategoryDataset data = new DefaultCategoryDataset();
     
     public void Report(){
+        
+    }
+    public void Cliente(){
         String gato = "";
         try {
             ConvertirFecha cf = new ConvertirFecha();
@@ -29,6 +32,38 @@ public class Reporte {
                 try {
                     Connection cn = Conexion.conectar();
                     CallableStatement cst = cn.prepareCall("{call spClientesPorMesTipo(?)}");
+                    cst.setString(1, gato);
+                    ResultSet rs = cst.executeQuery();
+
+                    String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+                    while(rs.next()){
+                        data.addValue(rs.getInt(3), rs.getString(2), meses[rs.getInt(1) - 1]);
+                    }
+                    Grafica = ChartFactory.createBarChart("Reporte ", "Categoria", "Score", data,
+                        PlotOrientation.VERTICAL,
+                        true, true, false);    
+                }catch(HeadlessException | SQLException e){
+                    System.out.println("error" + e);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("contacte con el administrador " + e);
+        }
+    }
+    
+    public void Recarga(){
+        String gato = "";
+        try {
+            ConvertirFecha cf = new ConvertirFecha();
+            Connection cn2 = Conexion.conectar();
+            PreparedStatement pst2 = cn2.prepareStatement("SELECT FechaRecarga FROM Recargas");
+            ResultSet rs2 = pst2.executeQuery();
+            if(rs2.next()){
+                gato = cf.Fecha(rs2.getString("FechaRecarga"), "yyyy");
+            
+                try {
+                    Connection cn = Conexion.conectar();
+                    CallableStatement cst = cn.prepareCall("{call spRecargasMes(?)}");
                     cst.setString(1, gato);
                     ResultSet rs = cst.executeQuery();
 

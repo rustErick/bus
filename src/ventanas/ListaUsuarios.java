@@ -19,6 +19,7 @@ public class ListaUsuarios extends javax.swing.JFrame {
     
     public ListaUsuarios() {
         initComponents();
+        
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         
@@ -62,7 +63,7 @@ public class ListaUsuarios extends javax.swing.JFrame {
                 if(fila > -1){
                     userUpdate = (String)model.getValueAt(fila, columna);
                     dispose();
-                    new InformacionUsuario().setVisible(true);
+                    new ModificarUsuario().setVisible(true);
                     
                 }
             }

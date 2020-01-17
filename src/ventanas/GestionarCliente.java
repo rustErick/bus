@@ -18,7 +18,7 @@ public class GestionarCliente extends javax.swing.JFrame {
 
     ImageIcon myPicture = null;
     String imgP;
-    
+    public static int dni;
     public GestionarCliente() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -247,7 +247,7 @@ public class GestionarCliente extends javax.swing.JFrame {
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         Photo img = new Photo();
         String imageName = img.saveImage(myPicture, "images");
-        int dni = Integer.parseInt(txtDni.getText().trim());
+        dni = Integer.parseInt(txtDni.getText().trim());
         int validacion = 0;
         String sexo = "", tipoCliente = "";
 

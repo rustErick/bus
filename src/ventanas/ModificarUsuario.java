@@ -11,11 +11,11 @@ import javax.swing.WindowConstants;
  *
  * @author erick
  */
-public class InformacionUsuario extends javax.swing.JFrame {
+public class ModificarUsuario extends javax.swing.JFrame {
 
     String userUpdate="";
     int ID;
-    public InformacionUsuario() {
+    public ModificarUsuario() {
         initComponents();       
         userUpdate = ListaUsuarios.userUpdate;
         this.setLocationRelativeTo(null);
@@ -260,7 +260,7 @@ public class InformacionUsuario extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InformacionUsuario().setVisible(true);
+                new ModificarUsuario().setVisible(true);
             }
         });
     }

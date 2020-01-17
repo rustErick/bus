@@ -122,7 +122,7 @@ public class FuncionEmpleado extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void lblListaRecargasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblListaRecargasMouseClicked
-        new InformacionRecarga().setVisible(true);
+        new ListaRecargas().setVisible(true);
     }//GEN-LAST:event_lblListaRecargasMouseClicked
 
     public static void main(String args[]) {

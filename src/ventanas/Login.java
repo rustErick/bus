@@ -69,7 +69,7 @@ public class Login extends javax.swing.JFrame {
         setLocation(new java.awt.Point(0, 0));
         setUndecorated(true);
 
-        jPanel1.setBackground(new java.awt.Color(241, 241, 51));
+        jPanel1.setBackground(new java.awt.Color(166, 178, 245));
 
         jPanel2.setBackground(new java.awt.Color(102, 168, 37));
 
